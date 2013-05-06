@@ -1,0 +1,281 @@
+{% extends 'snippet/layout.html' %}
+
+{% block title  %}
+存折网 -  理财产品 信用卡
+{% endblock  %}
+{% block main %}
+<body>
+<script type="text/javascript">
+    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fd14af01252975f32b53bdc688222918f' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    function check(){ 
+        var val1=document.getElementById('money').value;
+        var val2=document.getElementById('day').value; 
+        if(!/^[1-9]\d*$/.test(val1)||!/^[1-9]\d*$/.test(val2)){
+                alert('请输入大于5万的整数金额');
+            //obj.focus();
+            return false;
+        }else{
+            if(val1 < 5){
+                alert('请输入大于5万的整数金额');
+                return false;
+            }
+            else{
+                document.getElementById('calculate_results').style.display='block';
+                return true;
+            }
+        }
+    } 
+</script>
+    <div class="container">
+        <div class="row">
+        <div class="nodes-cloud container-box mt10">
+        <ul>
+<div class="row" style="height:150px;">
+    <div class="span12" style="height:80px;">
+        <form class="form-inline" action="calculate" method="post"  onsubmit= "return check()">
+            <fieldset>
+              <div class="logo31" style="text-align:center;">
+                 <label class="control-label" for="money"><font size=+1><b>计划理财金额:</b></font></label>
+                <div class="input-append" >
+				{% if money %}
+                     <input class="span4" id="money" name="money" size="16" type="text" value="{{money}}" ><span class="add-on"><font size=+1><b>万元</b></font></span>
+                     
+				{% else %}	 
+					 <input class="span4" id="money" name="money" size="16" type="text" value="5" ><span class="add-on"><font size=+1><b>万元</b></font></span>
+   				{% endif %}          
+			 
+			 </div>
+         </div><p></p>
+            <div class="logo32" style="text-align:center;">
+                <label class="control-label" for="day"><font size=+1><b>计划理财周期:</b></font></label>
+                <div class="input-append">
+                    {% if duration %}
+					<input class="span4" id="day" name="duration" size="16" type="text" value="{{duration}}"><span class="add-on"><font size=+1><b>天</b></font>&nbsp&nbsp&nbsp&nbsp</span>
+					
+					{% else %}
+					
+					<input class="span4" id="day" name="duration" size="16" type="text" value="50"><span class="add-on"><font size=+1><b>天</b></font>&nbsp&nbsp&nbsp&nbsp</span>
+                    {% endif %}
+				</div>
+            </div><p></p>
+            <div class="logo33" style="text-align:center;">
+                <button class="btn btn-primary btn-large" type="submit">
+
+                    算算能赚多少钱
+                </button>
+            </div>
+            </fieldset>
+            {{ xsrf_form_html() }}
+        </form>
+    </div>
+</div>
+
+        <input type='hidden' name='orderBy' id='orderBy' value='0'/>
+        <input type='hidden' name='desc' id='desc' value='desc'/>
+        <input type='hidden' name='p' id='p' value='1'/>
+        <input type='hidden' name="name" id="name"/>
+        <input type='hidden' name='max_ratio_min' id="max_ratio_min" value="-1"/>
+        <input type='hidden' name='max_ratio_max' id="max_ratio_max" value="-1"/>
+        <input type='hidden' name='object[]' id="object" value=""/>
+        {% if profit.num %}
+	
+        <div id="result">
+        <div style="text-align:center;">
+        {% for item in profit['items'][0:1] %}
+        <p><span style="margin-left:10px;font-size:16px;" align="center"  ><font size=+1><b>理财产品最高收益:</b>
+        </font></span><span style="margin-left:20px;color:red;"><font size=+1><b>{{item[0]}}元</b></font></span></p>
+        {% endfor %}
+        <p><span style="margin-left:10px;font-size:16px;" align="center" ><b><font size=+1 >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp储蓄收益:</font></b>
+        </span><span style="margin-left:20px;color:red;" ><font size=+1><b>{{profit.chuxuitems[0][0]}}元</b></font></span></p>
+        </div>
+    </div>
+    <div id="plan">
+        <p><span style="margin-left:10px;font-size:16px;" align="" ><b><font size=+1 >总共有{{profit.num}}条 理财方案:</font></b>
+        <div id="plan_t1" style="display:none;">
+        <table class="table table-table table-bordered table-striped">
+                <tr>
+                    <td id="td1" style="width:100px;text-align:center;"><font size=+1><b>收益（元）</b></font></td>
+                    <td id="td2" style="text-align:center;"><font size=+1><b>方式</b></font></td>
+                    <td id="td3" style="width:500px;text-align:center;"><font size=+1><b>步骤</b></font></td>
+                </tr>
+                {% for itm in profit['items'][0:10] %}
+                <tr id="plan_tr1">
+                    <td id="td1"><font size=+1><b>{{itm[0]}}</b></font></td>
+                    <td id="td2"><span style="color:red;letter-spacing:2px;"><font size=-1><b>{{itm[5]}}</b></font></span><br>
+                        <a href="licai/{{itm[3]}}" target="_blank"><font size=-1>{{itm[1]}}</font></a><br>
+                        <span>{{itm[6]}}</span>
+                        <!--  <span class="result_list_pname_label label label-warning" ><font size=-1>{{itm[4]}}</font></span></td>-->
+                    <td id="td3"><font size=+1>{{itm[2]}}</font></td>
+                </tr>
+                {% endfor %}
+                <tr id="plan_tr1">
+                    <td id="td1"><font size=+1><b>{{profit.chuxuitems[-1][0]}}</b></font></td>
+                    <td id="td2">
+                        <span style="color:red;letter-spacing:2px;"><b><font size=-1>{{profit.chuxuitems[-1][5]}}</font></b>
+                        </span><br>{{profit.chuxuitems[-1][1]}}</font></a></br>
+                        <span class="result_list_pname_label label label-warning"><font size=-1>{{profit.chuxuitems[-1][4]}}</font></span></td>
+                    <td id="td3"><font size=+1>{{profit.chuxuitems[-1][2]}}</font></td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="plan_t" style="display:block;">
+        <table class="table table-table table-bordered table-striped">
+                <tr>
+                    <td id="td1" style="width:100px;text-align:center;"><font size=+1><b>收益（元）</b></font></td>
+                    <td id="td2" style="text-align:center;"><font size=+1><b>方式</b></font></td>
+                    <td id="td3" style="width:500px;text-align:center;"><font size=+1><b>步骤</b></font></td>
+                </tr>
+                {% for itm in profit['items'][0:15] %}
+                <tr id="plan_tr1">
+                    <td id="td1"><font size=+1><b>{{itm[0]}}</b></font></td>
+                    <td id="td2"><span style="color:red;letter-spacing:2px;"><font size=-1><b>{{itm[5]}}</b></font></span><br>
+                        <span style="color:green">  <a href="licai/{{itm[3]}}" target="_blank"><font size=-1>{{itm[1]}}</font></a></span><br>
+                        <span style="color:green"><font size=-1>预计年化收益率：</font><font size=+1><b>{{itm[6]}}%</b></font></span>
+                      <!--  <span class="result_list_pname_label label label-warning" ><font size=-1>{{itm[4]}}</font></span></td>-->
+                    <td id="td3"><font size=+1>{{itm[2]}}</font></td>
+                </tr>
+                {% endfor %}
+                <tr id="plan_tr1">
+                    <td id="td1"><font size=+1 ><b>{{profit.chuxuitems[-1][0]}}</b></font></td>
+                    <td id="td2">
+                        <span style="color:red;letter-spacing:2px;"><b><font size=-1>{{profit.chuxuitems[-1][5]}}</font></b>
+                        </span><br><font size=-1>{{profit.chuxuitems[-1][1]}}</font></a></br>
+                    <td id="td3"><font size=+1>{{profit.chuxuitems[-1][2]}}</font></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+	{%endif%}
+	<ul> 
+</div>
+</div>
+    <script language="javascript" type="text/javascript"> 
+        function dyniframesize(down) { 
+            var pTar = null; 
+            if (document.getElementById){ 
+                pTar = document.getElementById(down); 
+                }
+            else{ 
+                eval('pTar = ' + down + ';'); 
+                } 
+            if (pTar && !window.opera){ 
+                //begin resizing iframe 
+                pTar.style.display="block" 
+                if (pTar.contentDocument && pTar.contentDocument.body.offsetHeight){ 
+                    //ns6 syntax 
+                    pTar.height = pTar.contentDocument.body.offsetHeight +20; 
+                    pTar.width = pTar.contentDocument.body.scrollWidth+20; 
+                    } 
+                else if (pTar.Document && pTar.Document.body.scrollHeight){ 
+                    //ie5+ syntax 
+                    pTar.height = pTar.Document.body.scrollHeight; 
+                    pTar.width = pTar.Document.body.scrollWidth; 
+                    } 
+                } 
+            } 
+ </script>
+   
+<div class="container">
+   <div class="row">
+    <div class="span12">
+        <h3><span>理财产品列表</span></h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="th2">银行</th>
+                    <th class="th2">理财产品名称</th>
+                    <th class="th2">销售起止日</th>
+                    <th class="th2">币种</th>
+                    <th class="th2">委托期限</th>
+                    <th class="th2">起购金额</th>
+                    <th class="th1">预计年化收益率</th>
+                    <th class="th1">起购金额到期收益</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in tuijianfengbiitems[0:5] %}
+                <tr>
+                    <td style="width:100px;">{{ item[0]}}</td>
+                    <td style="width:270px;"><a style="cursor:pointer;" href='licai/{{item[7]}}' target="_blank">{{ item[1]}}</a></td>
+                    <td align="center" style="width:100px;">{{ item[2]}}</td>
+                    <td style="width:50px;">{{ item[3]}}</td>
+                    <td style="width:60px;">{{ item[4]}}</td>
+                    <td style="width:60px;">{{ item[5]}}</td>
+                    <td>{{ item[6]}}</td>
+                    <td>{{ item[8]}}元</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>    
+<div class="row">
+	<div class="span12">
+		
+
+		
+<span><b>合作银行</b></span></h3>
+
+<table class="table table-bordered">
+
+            <tbody>
+                                <tr>
+
+          <td align="center" style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001021"><img src="/static/BJ.jpg"></a></td>
+          <td align="center"style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001010"><img src="/static/ZY.jpg"></a></td>
+          <td align="center" style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001022"><img src="/static/HX.jpg"></a></td>
+          <td align="center"  style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001004"><img src="/static/SH.jpg"></a></td>
+          <td align="center"  style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001015"><img src="/static/JT.jpg"></a></td>
+          <td align="center" style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001048"><img src="/static/JS.jpg"></a></td>
+          <td align="center"  style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001064"><img src="/static/MS.jpg"></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001016"><img src="/static/NY.jpg"></a></td>
+          </tr>
+                                <tr>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001055"><img src="/static/ZS.jpg" ></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001078"><img src="/static/PF.jpg" ></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001015"><img src="/static/XY.jpg" ></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001042"><img src="/static/PA.jpg" ></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001009"><img src="/static/ZX.jpg" ></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001045"><img src="/static/GF.jpg"></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001013"><img src="/static/GD.jpg"></a></td>
+          <td style="width:120px;height:20px"><a href="http://www.cunzhe.com/licai?status=1&currency=1&bankid=80001041"><img src="/static/GS.jpg" ></a></td>
+
+
+                </tr>
+
+                            </tbody>
+        </table>
+    </div>
+</div>
+</div> <!-- /container -->
+
+    <div align="center">
+		<table>
+            <tr>
+                <td>
+                    <a href="https://itunes.apple.com/ug/app/cun-zhe-li-cai-li-cai-da-shi/id627873531?mt=8">
+                        <img src="http://www.cunzhe.com/static/ios_app_icon.png" alt=""/></a>
+                </td>
+                <td>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                </td>
+                <td>
+                    <a href="http://www.cunzhe.com/static/FinancialGuru_v1.1.1_ch100000.apk">
+                        <img src="http://www.cunzhe.com/static/green_android_buttons.jpg" alt=""/>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    <div>
+
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
