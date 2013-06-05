@@ -1,15 +1,9 @@
-def minus(f):
-    print 'minus'
-    f()
+# coding =utf-8
 
-def plus(f):
-    print 'plus'
-    f()
+import time
+import re
 
-def test(a):
-    if a > 3:return plus
-    else:return minus
+time1 = u'8天1小时33分'
 
-@test(2)
-def func():
-    print 'ok'
+hilst = re.findall("(.*?)天(.*?)小时(.*?)分",time1)
+print hlist
