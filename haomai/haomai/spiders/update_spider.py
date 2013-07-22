@@ -11,14 +11,14 @@ import tornado.database
 
 db = tornado.database.Connection("localhost:3306", "money","root","mnldfgrxr1Q")
 
-class ShumiUpdateSpider(BaseSpider):
-    name = "update_shumi"
-    allowed_domains = ["fund.fund123.cn"]
+class HaomaiUpdateSpider(BaseSpider):
+    name = "update_haomai"
+    allowed_domains = ["howbuy.com"]
     handle_httpstatus_list = [404]
     log.start(logfile='/root/scrapy.log', loglevel=log.INFO, logstdout=False)
     start_urls = [ ]
 
-    select_sql = "select link from CurrencyFund where resource = '数米网'"
+    select_sql = "select link from CurrencyFund where resource = '好买基金'"
     items = db.query(select_sql)
     for item in items:
         start_urls.append(item['link'])
@@ -36,12 +36,12 @@ class ShumiUpdateSpider(BaseSpider):
 
         hxs = HtmlXPathSelector(response)
         update_time = datetime.datetime.now()
-        interestTenThousand = hxs.select('/html/body/div[4]/div/div[2]/div[1]/p[2]/big/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','')
-        interestSevenDays = hxs.select('/html/body/div[4]/div/div[2]/div[2]/ul[1]/li[2]/big/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
-        riseOneMonth = hxs.select('/html/body/div[8]/div[2]/div[2]/div/div/div[3]/table/tbody/tr[3]/td[2]/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
-        riseThreeMonth = hxs.select('/html/body/div[8]/div[2]/div[2]/div/div/div[3]/table/tbody/tr[4]/td[2]/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
-        riseHalfYear = hxs.select('/html/body/div[8]/div[2]/div[2]/div/div/div[3]/table/tbody/tr[5]/td[2]/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
-        riseOneYear = hxs.select('/html/body/div[8]/div[2]/div[2]/div/div/div[3]/table/tbody/tr[6]/td[2]/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
+        interestTenThousand = hxs.select('//*[@id="nTab1_Con1"]/table/tr[1]/td[1]/span/strong/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','')
+        interestSevenDays = hxs.select('//*[@id="nTab1_Con1"]/table/tr[1]/td[3]/span/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
+        riseOneMonth = hxs.select('//*[@id="nTab1_Con1"]/table/tr[1]/td[6]/span/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
+        riseThreeMonth = hxs.select('//*[@id="nTab1_Con1"]/table/tr[2]/td[1]/span/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
+        riseHalfYear = hxs.select('//*[@id="nTab1_Con1"]/table/tr[2]/td[2]/span/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
+        riseOneYear = hxs.select('//*[@id="nTab1_Con1"]/table/tr[2]/td[3]/span/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
 
         sql = "update CurrencyFund set interestTenThousand = '" + interestTenThousand + "', interestSevenDays = '" + interestSevenDays + "', riseOneMonth = '" + riseOneMonth + "', riseThreeMonth = '" + riseThreeMonth + "', riseHalfYear = '" + riseHalfYear + "', riseOneYear = '" + riseOneYear + "', update_time = '" + str(update_time) + "' where code = '" + code + "'"
         print sql

@@ -55,7 +55,7 @@ class ShumiSpider(CrawlSpider):
         riseHalfYear = hxs.select('/html/body/div[8]/div[2]/div[2]/div/div/div[3]/table/tbody/tr[5]/td[2]/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
         riseOneYear = hxs.select('/html/body/div[8]/div[2]/div[2]/div/div/div[3]/table/tbody/tr[6]/td[2]/text()').extract()[0].strip().lstrip().rstrip(',').replace(',','').replace('%','')
 
-        sql = "insert into CurrencyFund(code,link,name,interestTenThousand,interestSevenDays,riseOneMonth,riseThreeMonth,riseHalfYear,riseOneYear,update_time,resource) values('"+code+"','"+response.url+"','"+name+"',"+interestTenThousand+","+interestSevenDays+",'"+riseOneMonth+"','"+riseThreeMonth+"','"+riseHalfYear+"','"+riseOneYear+"','"+str(update_time)+"','"+resource+"')"
+        sql = "insert into CurrencyFund(code,link,name,interestTenThousand,interestSevenDays,riseOneMonth,riseThreeMonth,riseHalfYear,riseOneYear,update_time,resource) values('"+code+"','"+response.url+"','"+name+"','"+interestTenThousand+"','"+interestSevenDays+"','"+riseOneMonth+"','"+riseThreeMonth+"','"+riseHalfYear+"','"+riseOneYear+"','"+str(update_time)+"','"+resource+"')"
         #print sql
         try:
             db.execute(sql)
