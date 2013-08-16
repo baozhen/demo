@@ -56,7 +56,7 @@ class ZhengdaSpider(BaseSpider):
             risk = u'保本保息'
             start_amount = '50'
             if uid in id_dict:
-                update_sql = "update p2p set used_amount = " + used_amount + ", remain_amount = " + remain_amount + ", complete_percent = " + complete_percent + ", bidder_num = " + bidder_num + " where id = '" + uid + "'"
+                update_sql = "update p2p set used_amount = " + used_amount + ", remain_amount = " + remain_amount + ", complete_percent = " + complete_percent + ", bidder_num = " + bidder_num + ", update_time = '" + str(datetime.datetime.now()) + "' where id = '" + uid + "'"
                 print update_sql
             else:
                 insert_sql = "insert into p2p(id, link, name, credit_level, amount, interest, period, used_amount, remain_amount, complete_percent, deadline, update_time, bidder_num, resource, risk, start_amount) values('"+uid+"','"+link+"','"+name+"', 'A', "+amount+","+interest+","+period+","+used_amount+","+remain_amount+","+complete_percent+",'"+str(deadline)+"','"+str(datetime.datetime.now())+"',"+bidder_num+",'"+resource+"','"+risk+"',"+start_amount+")"
